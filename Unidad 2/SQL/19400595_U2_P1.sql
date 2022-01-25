@@ -1,0 +1,148 @@
+/*
+PRACTICA 1
+AUTOR: INZUNSA DIAZ CESAR ALEJANDRO
+NO. CONTROL: 19400595
+FECHA: 28/09/21
+DESCRIPCION: APRENDER A UTILIZAR LA INSERCION, ELIMINACION, MODIFICACION Y CONSULTAS DE REGISTROS
+*/
+
+--PONER EN USO LA BD
+USE Northwind;
+
+--INSERTAR REGISTROS EN EMPLOYEES
+INSERT INTO Employees
+(LastName, FirstName, Title, TitleOfCourtesy, BirthDate, Address, City, ReportsTo)
+VALUES('Manjarrez','Kevin','Sales Representative','Mrs','2000-08-24','Valdivia 19','Tepic',5);
+
+
+--INSERTAR REGISTROS EN EMPLOYEES
+INSERT INTO Employees
+(LastName, FirstName, Title, TitleOfCourtesy, BirthDate, Address, City, ReportsTo, Region, PostalCode, HomePhone)
+VALUES('Lopez','Abel','Sales Representative','Mrs','2000-01-01','Avenida Tecnologico','Tepic',5, 'WA','63173','(206) 555-3412');
+
+--INSERTAR REGISTROS EN EMPLOYEES
+INSERT INTO Employees
+(LastName, FirstName, ReportsTo)
+VALUES('Lopez','Juan',2)
+GO 10
+
+
+-- BORRAMOS LOS CAMPOS QUE INSERTAMOS
+DELETE FROM Employees WHERE(EmployeeID BETWEEN 29 AND 38);
+
+--INSERTAR EN CATEGORIAS
+INSERT INTO Categories
+VALUES('Carne','Carnes varias','Carnes.png' );
+INSERT INTO Categories
+VALUES('Cereales','Pan, pasta, y cereal','Cereales.png' );
+INSERT INTO Categories
+VALUES('Dulces','Postres, dulces, y pan dulce','Dulces.png' );
+INSERT INTO Categories
+VALUES('Bebidas','Jugo, leche, bebidas sin alcohol','Bebidas.png' );
+INSERT INTO Categories
+VALUES('Condimentos','Diferentes tipos de salsas','Condimentos.png' );
+
+--ACTUALIZAR LA FECHA DE NACIMIENTO Y DE CONTRATACION DEL EMPLEADO 1
+UPDATE Employees
+SET
+BirthDate = DATEADD(YEAR, 38, BirthDate),
+HireDate = DATEADD(YEAR, 8, HireDate)
+WHERE EmployeeID = 1;
+
+--MODIFICAR LA FECHA DE NACIMIETO Y DE CONTRATACION DE AQUELLOS EMPLEADOS CUYO ID ESTE DENTRO DE 2 Y 9
+UPDATE Employees
+SET
+BirthDate = DATEADD(YEAR, 38, BirthDate),
+HireDate = DATEADD(YEAR, 8, HireDate)
+WHERE EmployeeID BETWEEN 2 AND 9;
+
+--MODIFICAR LA FECHA DE NACIMIENTO DE AQUELLOS EMPLEADOS CUYA FECHA DE NACIMIENTO SEA MAYOR O IGUAL A 1990-01-01
+UPDATE Employees
+SET
+BirthDate = DATEADD(YEAR, -18, BirthDate)
+WHERE BirthDate >= '1990-01-01';
+
+--MODIFICAR LA FECHA DE CONTRATACION DE AQUELLOS EMPLEADOS CUYA FECHA DE CONTRATACION SEA IGUAL A NULL
+UPDATE Employees
+SET HireDate = '2020-02-05'
+WHERE HireDate IS NULL;
+
+/*
+GENERAR UNA CONSULTA DE LAS ORDENES DE LA 10,250 A LA 10,310 PERO SOLO MOSTRANDO EL CAMPO DE
+ORDENID, EL CAMPO DEL ID DEL CLIENTE (CUSTUMERID), EL ID DLE EMPLEADO QUE VENDIO LA ORDEN
+LA FECHA DE ORDEN Y LA DIRECCION A DONDE LO ENVIAMOS
+*/
+SELECT OrderID,CustomerID,EmployeeID,OrderDate,ShipAddress FROM Orders WHERE OrderID>=10250 AND OrderID<=10310;
+
+/*
+ACTUALIZAR LAS FECHAS QUE TIENEN LAS ORDENES, QUE QUEDEN DEL 2019,2020,2021
+Y LAS QUE QUEDAN NULL PONER EN EL CAMPO SHIPPED_DATE 5 DIAS MAS DE LA FECHA DE ORDEN
+*/
+UPDATE Orders
+SET
+OrderDate = DATEADD(YEAR, (2019 - YEAR(OrderDate)), OrderDate),
+RequiredDate = DATEADD(YEAR, (2020 - YEAR(RequiredDate)), RequiredDate),
+ShippedDate = DATEADD(YEAR, (2021 - YEAR(ShippedDate)), ShippedDate)
+WHERE OrderID>=10250 AND OrderID<=10310;
+
+
+UPDATE Orders
+SET
+ShippedDate = DATEADD(DAY, 5, OrderDate)
+WHERE ShippedDate IS NULL;
+
+--numero de orden, cliente que lo compro, el empleado que la vendio, la fecha de orden
+--quiero que los campos queden renombrados
+SELECT OrderId AS 'No. Orden', CustomerID AS 'Cliente', EmployeeID AS 'Vendedor', OrderDate  AS 'Fecha de orden'
+FROM Orders
+ORDER BY OrderDate DESC;
+
+--SELECCIONAR LOS EMPLEADOS QUE AL MENOS HAN VENIDO UNA ORDEN
+SELECT DISTINCT(EmployeeId) FROM Orders;
+
+--INSERTAR UN REGISTRO DE VENTA EN ORDENES
+INSERT INTO Orders
+(CustomerID, EmployeeId, ShipVia, OrderDate, RequiredDate, ShippedDate, ShipAddress)
+VALUES ('BONAP', 10, 3, GETDATE(), '2021-10-10', '2021-10-06', 'Av. Tecnologico');
+
+--EN ORDENES, OBTENER LA CANTIDAD DE ORDENES QUE HEMOS VENDIDO
+SELECT COUNT(*) AS [NO. ORDENES VENDIDAS] FROM Orders;
+
+--MOSTRAR CUANTAS ORDENES A VENIDO CADA EMPLEADO
+SELECT EmployeeId AS 'Empleado', COUNT(EmployeeId) AS 'Total de ordenes'
+FROM Orders GROUP BY EmployeeId;
+
+--MOSTRAR CUANTAS ORDENES HA COMPRADO CADA CLIENTE
+SELECT CustomerID AS 'Cliente', COUNT(CustomerID) AS 'Total de compras'
+FROM Orders GROUP BY CustomerID;
+
+/*
+1. CONSULTA TODOS LOS NOMBRES DE LOS EMPLEADOS QUE NO HAYAN VENDIDO NINGUNA ORDEN
+A) USANDO EL OPERADOR IN
+B) USANDO EL OPERADOR EXISTS
+*/
+
+--A)
+SELECT FirstName + ' '+LasTName AS EMPLEADO
+FROM Employees
+WHERE EmployeeID NOT IN (SELECT DISTINCT EmployeeId FROM Orders);
+
+
+--B)
+SELECT FirstName + ' '+LasTName AS EMPLEADO
+FROM Employees E
+WHERE NOT EXISTS (SELECT * FROM Orders O WHERE E.EmployeeID= O.EmployeeID);
+
+/*
+2. CONSULTA LOS PRODUCTOS QUE HEMOS VENDIDO CUYO VALOR SEA MAYOR AL PROMEDIO DE PRECIOS
+DE LA LISTA DE NUESTROS PRODUCTOS EN EXISTENCIA USANDO UN OPERADOR DE COMPARACION
+*/
+SELECT OD.ProductID, P.ProductName, OD.UnitPrice
+FROM [Order Details] OD
+INNER JOIN Products P ON (OD.ProductID = P.ProductID)
+WHERE OD.UnitPrice > (SELECT AVG(UnitPrice) FROM Products);
+
+---1. IN ---> CUANDO LA SUBCONSULTA NOS DA UN CONJUNTO DE VALORES
+---2. EXISTS ---> CUANDO LA SUBCONSULTA NOS DA UN CONJUNTO DE REGISTROS
+
+---3. >,>=,<,<=, = CUANDO LA SUBCONSULTA NOS DA UN SOLO VALOR

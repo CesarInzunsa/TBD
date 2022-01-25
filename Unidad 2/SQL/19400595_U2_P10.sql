@@ -1,0 +1,602 @@
+/**
+PRACTICA 10
+AUTOR: INZUNSA DIAZ CESAR ALEJANDRO
+NO. CONTROL: 19400595
+FECHA: 28/10/2021
+DESCRIPCION: REFORZAR EL USO DE INSERT INTO, BULK INSERT, UPDATE, LA FUNCION UPPER(), CREATE VIEW,
+             INNER JOIN, LA FUNCIÓN COUNT()
+**/
+
+--PONER EN USO LA BD
+USE DirectorioTelefonico;
+
+--1. INSERTAR TIPOS PERSONA
+INSERT INTO TiposPersonas VALUES
+('A','AMIGOS'),
+('C','COMPAÑEROS DE CLASE'),
+('F','FAMILIA'),
+('M','MAESTROS'),
+('N','NEGOCIOS'),
+('S','SERVICIOS');
+
+--2. INSERTA LOS PAISES Y ESTADOS
+BULK INSERT dbo.Paises  FROM 'C:\TBD2021\U2\PAISES.CSV' WITH (FIELDTERMINATOR = ',');
+
+BULK INSERT dbo.Estados FROM 'C:\TBD2021\U2\ESTADOS_MEXICO.CSV' WITH (FIELDTERMINATOR = ',');
+BULK INSERT dbo.Estados FROM 'C:\TBD2021\U2\ESTADOS_USA_CANADA.CSV' WITH (FIELDTERMINATOR = ',');
+BULK INSERT dbo.Estados FROM 'C:\TBD2021\U2\PROVINCIAS_AFGANISTAN.CSV' WITH (FIELDTERMINATOR = ',');
+
+BULK INSERT dbo.Estados FROM 'C:\TBD2021\U2\ESTADOS_BOL.CSV' WITH (FIELDTERMINATOR = ',');
+BULK INSERT dbo.Estados FROM 'C:\TBD2021\U2\ESTADOS_BTN.CSV' WITH (FIELDTERMINATOR = ',');
+BULK INSERT dbo.Estados FROM 'C:\TBD2021\U2\ESTADOS_BMU.CSV' WITH (FIELDTERMINATOR = ',');
+BULK INSERT dbo.Estados FROM 'C:\TBD2021\U2\ESTADOS_BEL.CSV' WITH (FIELDTERMINATOR = ',');
+BULK INSERT dbo.Estados FROM 'C:\TBD2021\U2\ESTADOS_BRB.CSV' WITH (FIELDTERMINATOR = ',');
+BULK INSERT dbo.Estados FROM 'C:\TBD2021\U2\ESTADOS_ARM.CSV' WITH (FIELDTERMINATOR = ',');
+BULK INSERT dbo.Estados FROM 'C:\TBD2021\U2\ESTADOS_BGD.CSV' WITH (FIELDTERMINATOR = ',');
+BULK INSERT dbo.Estados FROM 'C:\TBD2021\U2\ESTADOS_BHR.CSV' WITH (FIELDTERMINATOR = ',');
+BULK INSERT dbo.Estados FROM 'C:\TBD2021\U2\ESTADOS_BHS.CSV' WITH (FIELDTERMINATOR = ',');
+BULK INSERT dbo.Estados FROM 'C:\TBD2021\U2\ESTADOS_AUT.CSV' WITH (FIELDTERMINATOR = ',');
+BULK INSERT dbo.Estados FROM 'C:\TBD2021\U2\ESTADOS_AUS.CSV' WITH (FIELDTERMINATOR = ',');
+BULK INSERT dbo.Estados FROM 'C:\TBD2021\U2\ESTADOS_ARG.CSV' WITH (FIELDTERMINATOR = ',');
+BULK INSERT dbo.Estados FROM 'C:\TBD2021\U2\ESTADOS_AZE.CSV' WITH (FIELDTERMINATOR = ',');
+BULK INSERT dbo.Estados FROM 'C:\TBD2021\U2\ESTADOS_ATG.CSV' WITH (FIELDTERMINATOR = ',');
+BULK INSERT dbo.Estados FROM 'C:\TBD2021\U2\ESTADOS_AGO.CSV' WITH (FIELDTERMINATOR = ',');
+BULK INSERT dbo.Estados FROM 'C:\TBD2021\U2\ESTADOS_AND.CSV' WITH (FIELDTERMINATOR = ',');
+BULK INSERT dbo.Estados FROM 'C:\TBD2021\U2\ESTADOS_DZA.CSV' WITH (FIELDTERMINATOR = ',');
+BULK INSERT dbo.Estados FROM 'C:\TBD2021\U2\ESTADOS_ALB.CSV' WITH (FIELDTERMINATOR = ',');
+BULK INSERT dbo.Estados FROM 'C:\TBD2021\U2\ESTADOS_COL.CSV' WITH (FIELDTERMINATOR = ',');
+
+--3. INSERTAR LOS MUNICIPIOS DEL ESTADO DE NAYARIT Y JALISCO (BULK INSERT)
+BULK INSERT dbo.Municipios FROM 'C:\TBD2021\U2\MUNICIPIOS_NAYARIT.CSV' WITH (FIELDTERMINATOR = ',');
+BULK INSERT dbo.Municipios FROM 'C:\TBD2021\U2\MUNICIPIOS_JALISCO.CSV' WITH (FIELDTERMINATOR = ',');
+
+/*
+4. INSERTAR LAS LOCALIDADES DEL ESTADO DE NAYARIT Y JALISCO (BULK INSERT)
+   LOS ARCHIVOS DE TEXTO ESTAN EN EL DRIVE
+*/
+BULK INSERT dbo.Localidades FROM 'C:\TBD2021\U2\LOCALIDADES_NAYARIT.CSV' WITH (FIELDTERMINATOR = ',');
+BULK INSERT dbo.Localidades FROM 'C:\TBD2021\U2\LOCALIDADES_JALISCO.CSV' WITH (FIELDTERMINATOR = ',');
+
+/*
+5. INSERTAR LAS LOCALIDADES DEL ESTADO DE SINALOA Y SONORA
+   USTED BUSCARA LOS DATOS Y DEBEN DE HACER EL ARCHIVO DE TEXTO QUE PUEDAN 
+   INSERTARLOS DENTRO DE LA BD CON EL BULK INSERT
+*/
+BULK INSERT dbo.Municipios FROM 'C:\TBD2021\U2\MUNICIPIOS_SINALOA.CSV' WITH (FIELDTERMINATOR = ',');
+BULK INSERT dbo.Municipios FROM 'C:\TBD2021\U2\MUNICIPIOS_SONORA.CSV' WITH (FIELDTERMINATOR = ',');
+
+BULK INSERT dbo.Localidades FROM 'C:\TBD2021\U2\LOCALIDADES_SINALOA.CSV' WITH (FIELDTERMINATOR = ',');
+BULK INSERT dbo.Localidades FROM 'C:\TBD2021\U2\LOCALIDADES_SONORA.CSV' WITH (FIELDTERMINATOR = ',');
+
+/*
+6. EDITAR LOS REGISTROS EN MODO GRÁFICO Y CORREGIR LOS ACENTOS Y Ñ’s
+   EN MODO GRÁFICO CON CLICK DERECHO SOBRE LA TABLA Y EDITAR
+*/
+
+/*
+7. QUE TODOS LOS REGISTROS QUEDEN EN MAYÚSCULAS
+   REALICE UN UPDATE A LOS NOMBRES CON UNA FUNCION LLAMADA UPPER LOS PUEDE 
+   CONVERTIR
+*/
+UPDATE dbo.Estados SET dbo.Estados.EstadoNombre = UPPER(dbo.Estados.EstadoNombre);
+UPDATE dbo.Municipios SET dbo.Municipios.MpoNombre = UPPER(dbo.Municipios.MpoNombre);
+UPDATE dbo.Localidades SET dbo.Localidades.LocNombre = UPPER(dbo.Localidades.LocNombre);
+UPDATE dbo.Directorio SET
+dbo.Directorio.DirNombre = UPPER(dbo.Directorio.DirNombre),
+dbo.Directorio.DirApellidos = UPPER(dbo.Directorio.DirApellidos),
+dbo.Directorio.DirCalle = UPPER(dbo.Directorio.DirCalle),
+dbo.Directorio.DirColonia = UPPER(dbo.Directorio.DirColonia);
+
+/*
+8. ESCOGE 15 LOCALIDADES DIFERENTES DEL ESTADO DE NAYARIT E INSERTA 100 PERSONAS 
+   DE LOS DIFERENTES TIPOS DE PERSONA. NO LOS HAGAS FIJO EN CADA LOCALIDAD VARIA 
+   EL NUMERO. (CON GO #)
+*/
+--INSERTAR REGISTROS EN DBO.DIRECTORIO DEL ESTADO DE NAYARIT
+INSERT INTO Directorio VALUES
+('CESAR','INZUNSA DIAZ','PADRÓ ',65,6,'12 de Diciembre',32183,8884488892,3117270508,484,18,17,111,'N'),
+('ESTEFANIA','AROCAS PASADAS','CASA CORDELLAS ',502,8,'15 de Mayo',25505,7883636927,3115598739,484,18,17,1,'M'),
+('QUERALT','VISO GILABERT','DOCTOR FLEMING ',967,6,'18 de Agosto',76138,8554705687,3112259414,484,18,17,117,'S'),
+('JOAN','AYALA FERRERAS','BERTRAND I SERRA ',12,5,'20 de Noviembre',57526,8454463083,3117008458,484,18,17,108,'C'),
+('JOAN','BAEZ TEJADO','CARRIÓ ',398,2,'26 de Septiembre',60537,5979545090,3112147366,484,18,17,108,'A'),
+('MARC','BASTARDES SOTO','PIRINEUS ',190,7,'2 de Agosto',78075,6911390728,3113476359,484,18,17,109,'N'),
+('JOSEP','ANGUERA VILAFRANCA','JACINT VERDAGUER ',806,10,'4 Milpas',64035,7954194687,3114338300,484,18,17,108,'C'),
+('ESTHER','PASCUAL ALOY','NOU ',757,8,'5 de Febrero',74613,9535521072,3112152057,484,18,17,115,'F'),
+('LAURA','VALLÉS GIRVENT','JACINT VERDAGUER ',953,8,'Acayapan',66018,4636118514,3114877191,484,18,17,113,'S'),
+('RAQUEL','RAYA GARCIA','JOAN MIRÓ ',752,4,'Adolfo López Mateos',61002,1111522384,3115920333,484,18,17,110,'F'),
+('JOAN','ANDREU CRUZ','JAUME GALOBART ',915,7,'Alaska',92408,3398058737,3116933917,484,18,17,105,'A'),
+('MARIA ISABEL','BARALDÉS COMAS','PINTOR SERT ',236,7,'Amado Nervo',33166,6432857150,3114830909,484,18,17,103,'A'),
+('ADRIÀ','BERENGUERAS CULLERÉS','BELLAVISTA ',956,3,'América Manríquez',42167,1592062969,3114178181,484,18,17,103,'N'),
+('GERARD','LÓPEZ DE PABLO GARCIA UCEDA','MONTURIOL ',913,9,'Ampliación El Paraíso',16773,7617677583,3118139418,484,18,17,104,'F'),
+('ELIOT','ARNAU MORENO','JACINT VERDAGUER ',371,9,'Ampliación Santa Teresita',61618,9588913945,3116425331,484,18,17,114,'A'),
+('JORDI','RAYA GAVILAN','CASA NOVA ',251,10,'Ampliación Tierra y Libertad',69272,7688065671,3119231620,484,18,17,114,'S'),
+('LLUÍS','ZAMBUDIO FIGULS','DE LA CAÇA ',260,5,'Ampliación Unidad Obrera',67902,5557656665,3117580058,484,18,17,104,'S'),
+('LAURA','BIDAULT CULLERÉS','PINTOR SERT ',820,10,'Aramara',75018,9001009183,3113120345,484,18,17,113,'S'),
+('JORDI','BIOSCA FONTANET','CASA SARA ',282,2,'Arboledas',67894,4901877931,3119177673,484,18,17,111,'S'),
+('DOUNYA','ZAFRA FIGULS','ARTÈS ',295,3,'Aves del Paraíso',49615,4120092783,3115598839,484,18,17,107,'C'),
+('JULIO','ALEU ICART','GENERAL PRIM ',793,7,'Aviación',44339,4134946311,3111574559,484,18,17,105,'S'),
+('ANDREU','BADIA TORNÉ','CAU DE LA GUINEU ',193,9,'Aztlán El Verde',50522,4013982417,3115498327,484,18,17,103,'N'),
+('RAMON','MORALES GESE','JOAN SANMARTÍ ',791,2,'Aztlán Solidaridad',61690,5497966395,3119080139,484,18,17,107,'C'),
+('DAVID-JESE','BLANCO FONTANET','PROL. PADRÓ ',636,4,'Benito Juárez',91830,7899275715,3115859731,484,18,17,113,'S'),
+('ARAN','ALVAREZ FERNÁNDEZ','SALLENT ',126,7,'Benito Juárez Oriente',63017,3680133158,3112718377,484,18,17,108,'C'),
+('GEMMA','GARCIA ALMOGUERA','JOAN MIRÓ ',192,2,'Bethel',37522,3355321706,3115866539,484,18,17,116,'C'),
+('IVAN','LIBORI FIGUERAS','LLUÍS CASTELLS ',54,3,'Bonaterra',70944,7834758875,3112679659,484,18,17,1,'A'),
+('DAVID','BIDAULT PUEYO','SANT VALENTÍ ',514,3,'Brisas de San Juan',19127,8677590842,3111741374,484,18,17,1,'C'),
+('XAVIER','BENITEZ JOSE','ÀNGEL GUIMERÀ ',768,4,'Buenos Aires',80806,5452216230,3112352450,484,18,17,113,'F'),
+('MARIO','PASCUAL FLORES','JAUME GALOBART ',363,1,'Bugambilias',99124,9860701860,3116472247,484,18,17,117,'S'),
+('JESUS','AYALA TORNÉ','AVINGUDA TRES ',161,2,'Burócrata Estatal',58020,3479819143,3112743081,484,18,17,1,'A'),
+('GEMMA','LISTAN FIGUERAS','JACINT VERDAGUER ',818,4,'Burócrata Federal',35127,6575218466,3114858900,484,18,17,103,'F'),
+('SILVIA','RASERO GAVILAN','DIPUTACIÓ ',155,6,'Caja de Agua',40918,5250684020,3113392492,484,18,17,116,'C'),
+('ALBERT','ARNALOT PUIG','VIC ',533,2,'Caminera',37475,8392930244,3118885721,484,18,17,113,'C'),
+('MARIA','MOLINER GARRIDO','GERMAN DURAN ',62,10,'Camino Real',95594,8828043776,3117027948,484,18,17,115,'M'),
+('BERTA','GALOBART GARCIA','BELLAVISTA ',907,5,'Cantera del Nayar',28595,9098925463,3117715142,484,18,17,113,'M'),
+('BERTA','LÓPEZ GARRIGASSAIT','NOU ',136,8,'Cáp. Orozco',71748,2781057396,3116249161,484,18,17,116,'C'),
+('MIREIA','SÁNCHEZ GÓMEZ','MANELIC ',517,5,'Castilla',70292,1886995277,3115331750,484,18,17,106,'A'),
+('GEMMA','ALAVEDRA SUNYÉ','DE LA PESCA ',813,6,'Centro SCT Nayarit',52757,6524532306,3112801732,484,18,17,105,'M'),
+('MARIA ISABEL','ALIGUÉ BONVEHÍ','PIRINEUS ',236,5,'Chapultepec',51039,6655657512,3114327890,484,18,17,109,'C'),
+('TONI','MAS FRANCH','PROL. JACINT VERDAGUER ',638,10,'Ciudad del Valle',15667,7252741489,3112352310,484,18,17,103,'A'),
+('ALEJANDRO','ALOY COMPTE','MALLORCA ',824,2,'Ciudad Industrial',32397,6499513961,3117687956,484,18,17,104,'N'),
+('JOAN MARTÍ','ASENSIO VEGA','SANT BENET ',206,5,'Ciudad Industrial Microindustria',80287,5869143645,3119221637,484,18,17,115,'F'),
+('INGRID','BIDAULT PÉREZ','PROL. PADRÓ ',289,1,'Colinas del Nayar',17491,9225121963,3119288792,484,18,17,114,'A'),
+('OLIVER','ALOY CODINACHS','ARTÈS ',122,9,'Colinas del Rey',88428,1687518383,3117982257,484,18,17,113,'M'),
+('SANDRA','ALTIMIRAS ARMENTEROS','JOAN XXIII ',104,10,'Colonial',67104,6187363121,3114681740,484,18,17,110,'S'),
+('JORDI','BELMONTE SÁNCHEZ','BERTRAND I SERRA ',187,2,'Comerciantes',39490,9304324390,3119071869,484,18,17,1,'M'),
+('MARC','BAJONA GARCIA','LA SARDANA ',886,2,'Conasupo',12824,4968034078,3114458286,484,18,17,108,'N'),
+('JORDINA','AGUILAR RODRIGUEZ','GALILEU ',377,10,'Cora',46515,5770530861,3118152017,484,18,17,111,'C'),
+('MARIA JOSÉ','BARRIGA SOTO','SANT VALENTÍ ',944,6,'Corralón',71622,9610416226,3114932652,484,18,17,114,'N'),
+('RAQUEL','AVILA MASJUAN','JOAN XXIII ',265,3,'Cuauhtémoc',72955,2033485416,3118552520,484,18,17,103,'M'),
+('ENRIC','PARRAMON FLORES','DE LA PAU ',352,9,'Cuitlahuac',80472,7208963050,3113213877,484,18,17,109,'A'),
+('MARTA','AGUILAR RAMOS','SANT ANTONI MARIA CLARET ',177,10,'Del Bosque',44533,7241620150,3111379911,484,18,17,110,'S'),
+('CARLA','AYALA ALSINA','AVINGUDA TRES ',786,8,'Del Sol',13086,6064901499,3113106113,484,18,17,105,'C'),
+('MARIA NOELIA','ALVAREZ TROYANO','PROL. PADRÓ ',523,4,'Dieciséis de Septiembre',34047,5729199017,3118823982,484,18,17,107,'A'),
+('CRISTINA','ALINS GONZÁLEZ','SANT JOAN ',134,4,'Dr. Cuesta Barrios',80870,7975616700,3113194443,484,18,17,105,'C'),
+('CARLOS','ACUÑA TORT','PROL. JACINT VERDAGUER ',350,4,'Dr. Lucas Vallarta',97660,4803395305,3118922590,484,18,17,110,'S'),
+('DAVID','ALGUÉ TRANCHO','JOAN XXIII ',117,7,'Ecologistas',37371,9387656245,3111376060,484,18,17,110,'N'),
+('CRISTIAN','BADIA CASTILLO','LLUÍS CASTELLS ',707,9,'Ejidal',87087,2476545899,3115833084,484,18,17,117,'N'),
+('JULIO ALBERTO','BENITEZ FLORES','PADRÓ ',442,10,'El 8',44298,5259251637,3119821140,484,18,17,110,'F'),
+('SERGI','TORRUELLA GARCIA','SANT ISCLE ',809,7,'El Aguacate',25218,1313432546,3112290797,484,18,17,115,'N'),
+('ALEIX','ALBERICH RODRIGUEZ','MONTSERRAT ',834,1,'El Armadillo',51571,4467574268,3118638228,484,18,17,115,'M'),
+('VERÒNICA','ARMENCOT PUIG','PROL. JACINT VERDAGUER ',316,7,'El Capomo',27915,1044198611,3115581888,484,18,17,109,'S'),
+('MARIONA','ALIGUÉ RIVERA','TRABUCAIRES ',188,5,'Electricistas',41262,9588753591,3114525889,484,18,17,104,'A'),
+('MARC','BARRIGA RIU','JACINT VERDAGUER ',232,10,'El Faisán',40575,4631512245,3111613684,484,18,17,113,'A'),
+('GEMMA','PORTELLA GISPETS','MANELIC ',638,5,'El Mirador INFONAVIT',72804,1855558986,3115472416,484,18,17,104,'M'),
+('RICARD','AGUILERA BAENA','VERGE DE FÀTIMA ',586,7,'El Naranjal',59889,1335598341,3114473752,484,18,17,109,'M'),
+('JUAN','RODRIGUEZ GARCÍA','SANT JOAN ',993,9,'El Palomar',95182,5828431397,3113581291,484,18,17,116,'N'),
+('MARTA','AGUILAR SUNYÉ','GALILEU ',102,5,'El Paraíso',69866,4908821948,3115455438,484,18,17,103,'N'),
+('NATÀLIA','BARRIGA TARDÀ','ESPORTS ',593,4,'El Parían',97661,7656272209,3113721240,484,18,17,105,'C'),
+('MARTA','BARCONS LARA','JOSEP BOIXADERAS ',727,2,'El Pedregal',39999,4444847866,3118419990,484,18,17,106,'S'),
+('LAURA','AGUILERA TATJÉ','CERVANTES ',319,10,'El Puerto',41132,8169147795,3115701231,484,18,17,108,'M'),
+('JOAN','ALEU PRAT','CERVANTES ',19,7,'El Punto',27454,1334565358,3117056420,484,18,17,110,'M'),
+('ALEXIA','VALLÉS GIRVENT','JOAN XXIII ',529,8,'El Rodeo',91182,4659065178,3115734488,484,18,17,104,'A'),
+('FERRAN','MOLINA GARRIDO','DOCTOR BARNARD ',832,2,'El Rubí',43264,5126707989,3111201300,484,18,17,109,'F'),
+('CRISTINA','ARISSA HERMOSO','ESPORTS ',863,6,'El Tecolote',16544,3242062591,3119169310,484,18,17,117,'F'),
+('JOSÉ ANTONIO','BARALDÉS PARDO','DE LA PAU ',320,10,'El Tecolote INFONAVIT',49577,8396436441,3113473350,484,18,17,115,'C'),
+('JORDI','SUAREZ GARZÓN','SANT VALENTÍ ',807,1,'Emiliano Zapata',72628,3376257170,3119822373,484,18,17,1,'S'),
+('BEGONYA','ARPA MORENO','PROL. PADRÓ ',394,4,'Emilio M. González',29468,6873461186,3118985770,484,18,17,107,'C'),
+('INGRID','ALOY FARRANDO','VIC ',164,7,'Estadios',55004,3993657304,3112152631,484,18,17,104,'C'),
+('MIQUEL','LUQUE GARRIGASAIT','SANT ISCLE ',259,10,'Esteban Baca Calderón',89259,1564931804,3113698679,484,18,17,105,'A'),
+('AGUSTÍ','RIDÓ GÓMEZ','JAUME BALMES ',46,8,'Extamex',85268,7608784780,3115267581,484,18,17,114,'C'),
+('ANTONI','SANTAMARIA FLOTATS','GERMAN DURAN ',499,8,'Félix Peña',94111,5312263158,3119448939,484,18,17,108,'A'),
+('JOAN','HERMS GÓMEZ','SANT JOAN ',24,3,'Ferrocarrilero 1a Secc.',42680,1849780897,3113071367,484,18,17,106,'A'),
+('MÒNICA','ARTIGAS MATURANO','PUIG ',210,10,'Ferrocarrilero 2a Secc.',54150,4977487335,3115434760,484,18,17,106,'N'),
+('GERARD','AGUILAR MASANA','PROL. JACINT VERDAGUER ',849,6,'Flamingos',82786,9549289669,3112365177,484,18,17,106,'N'),
+('GEMMA','ALTIMIRAS SERAROLS','RAMON I CAJAL ',328,9,'Florencia',39779,1670074064,3115974049,484,18,17,1,'N'),
+('MARIA','TORRESCASANA GARCIA','MORAGUES ',740,7,'Flores Magón',88394,7670946100,3111419922,484,18,17,113,'M'),
+('ORIOL','ARIZA PUIGBÓ','PROL. PADRÓ ',647,5,'FOVISSSTE 1a Etapa',36904,9176948842,3115364428,484,18,17,1,'N'),
+('VIRGINIA','ALVAREZ ARMENTEROS','FRANCESC DE VITÒRIA ',189,5,'FOVISSSTE 2a Etapa',81133,9676856672,3113910661,484,18,17,116,'M'),
+('DAMIÀ','BARALDÉS TARRAGÓ','ALBÉNIZ ',800,1,'Francisco Villa',41983,2265599142,3115471411,484,18,17,104,'S'),
+('VALENTÍ','GARCIA GARCÍA','TRES ROURES ',340,10,'Fray Junipero Serra',53015,4612464608,3113273393,484,18,17,104,'A'),
+('AINA','AROCA GÓMEZ','PROL. PADRÓ ',889,2,'Gardenias',38407,5249890828,3115738119,484,18,17,105,'M'),
+('DAVID','ALONSO RODRIGUEZ','ALBÉNIZ ',114,1,'Genaro Vázquez',15507,2254254789,3119143841,484,18,17,108,'M'),
+('GERARD','CANO GÓMEZ','FONT DEL GAT ',839,9,'Gilberto Flores Muñoz',21116,1462976698,3119279609,484,18,17,116,'F'),
+('MARTA','ALCAIDE MOLINA','MONTCAU ',978,10,'Gobernadores',81565,6595785537,3119863414,484,18,17,107,'M'),
+('MIREIA','AGUILERA PRAT','MONTURIOL ',991,5,'Gobierno del Cambio I',69087,2813822638,3118886677,484,18,17,113,'A'),
+('ELOI','ALAPONT ICART','VILATORRADA ',628,3,'Guadalupe',54868,8107674923,3117761499,484,18,17,1,'C'),
+('ANNA','RIVERO FLORIDO','JAUME GALOBART ',970,1,'Gustavo Díaz Ordaz',47896,5359280071,3111584871,484,18,17,111,'F'),
+('ALBA','AVILA MASJUAN','SANT GENÍS ',400,5,'Heriberto Casas',82338,8372781180,3112070389,484,18,17,108,'S');
+
+--9. HAZ LO MISMO QUE EL PUNTO 9 PARA LOS 3 ESTADOS QUE TIENEN LOCALIDADES.
+
+--INSERTAR REGISTROS EN DBO.DIRECTORIO DEL ESTADO DE JALISCO
+INSERT INTO dbo.Directorio VALUES
+('Frieda','Readhead','La Floresta Del Colli',434,4,'12 de Diciembre',77450,7004360953,3119878213,484,14,120,20,'C'),
+('Niccolo','Van','Balcones Del Sol',510,4,'27 de Septiembre',98168,7839348531,3119705409,484,14,120,4,'M'),
+('Fulton','Legge','Ecológica Seattle',730,8,'Agraria',70275,6490330021,3119460329,484,14,120,45,'F'),
+('Jamison','Caddick','Carlos Rivera',302,10,'Agraria Río Blanco',99076,9221545223,3118889448,484,14,120,7,'F'),
+('Dean','Medling','La Mora',846,10,'Agua Fría',49467,4145949059,3115534843,484,14,120,45,'F'),
+('Konstanze','Noller','Jardines Tapatíos',179,4,'Alamedas de Tesistán',72627,8975916360,3115026359,484,14,120,7,'C'),
+('Kienan','Nutt','Aldama',977,2,'Álamos',62979,7778927757,3118909918,484,14,120,37,'F'),
+('Corty','Gilman','Antonio Madrazo',995,8,'Altagracia',37827,6168964849,3113453873,484,14,120,21,'F'),
+('Nanny','Beddall','Colina Corintia',131,8,'Altamira',43085,3568914400,3116505833,484,14,120,38,'A'),
+('Marybelle','Batiste','General Salvador González T.',812,8,'Altavista Residencial',49785,1751601897,3116670901,484,14,120,22,'C'),
+('Susi','Kynnd','Obreros de Cananea',446,2,'Arboledas 2a Secc',59218,8581400301,3111388857,484,14,120,21,'C'),
+('Rebeca','Howchin','Venustiano Carranza',995,7,'Arcos de Guadalupe',30645,7183125080,3114349708,484,14,120,14,'N'),
+('Bradly','Cordingly','Antofagasta',53,1,'Arcos de Zapopan 1a. Sección',45284,5149284897,3115413059,484,14,120,29,'A'),
+('Puff','Casel','Arauca',533,10,'Arcos de Zapopan 2a. Sección',67172,7406478977,3116057878,484,14,120,4,'S'),
+('Bambi','MacSherry','Asunción',370,2,'Arrayanes',29129,9455252753,3119754085,484,14,120,20,'C'),
+('Wilt','Bustin','Avenida Américas',679,3,'Arroyo Hondo',42685,1609546611,3118594838,484,14,120,37,'N'),
+('Papageno','Prangnell','Avenida de la Patria',136,2,'Arroyo Hondo 2a Secc',96089,7072457395,3114810501,484,14,120,45,'N'),
+('Neely','Pullinger','Avenida Obelisco',475,6,'Atemajac Del Valle',51224,2567332361,3117117985,484,14,120,37,'C'),
+('Von','Antonignetti','Fenicios',68,3,'Atlas Chapalita',52615,8768923860,3115844143,484,14,120,37,'N'),
+('Lilas','Arniz','Hetitas',517,5,'Atlas Colomos',83405,8479900480,3114055949,484,14,120,4,'M'),
+('Alvie','Georgot','Hipodromo',39,10,'Aves del Paraíso',14037,4688397453,3113172778,484,14,120,14,'F'),
+('Alvis','Wattinham','Hipódromo',311,8,'Ayamonte',29582,2727777726,3112809780,484,14,120,38,'A'),
+('Vevay','Tolemache','Manuel Ávila Camacho',283,10,'Azaleas Del Valle',99797,7584738634,3116428884,484,14,120,22,'S'),
+('Gustie','Lively','Maracaibo',540,5,'Balcones de La Cantera',46166,9018413323,3111551324,484,14,120,6,'A'),
+('Matthus','Strutley','Masaya',568,2,'Balcones Del Sol',64606,9457064165,3114903823,484,14,120,14,'S'),
+('Frayda','Lohde','Medas',438,8,'Belenes Norte',36060,6183677770,3117649775,484,14,120,38,'S'),
+('Caralie','Jzak','Patria',97,10,'Belenes U de G',42850,2783162000,3119771627,484,14,120,22,'C'),
+('Beatrice','Bartolomivis','Romanos',797,3,'Bellavista',99048,7129964438,3116625147,484,14,120,6,'F'),
+('Delores','Earland','Tucumán',177,4,'Benito Juárez',11488,9101312810,3114852776,484,14,120,37,'N'),
+('Ailis','Gouley','5 de Mayo',875,4,'Benito Juárez Norte',97576,5891195727,3117841159,484,14,120,27,'N'),
+('Finley','Coite','Alberta',497,7,'Bosque de Los Encinos',42106,6416215468,3114093156,484,14,120,22,'N'),
+('Tate','Aubney','Altamira',941,8,'Bosque Escondido',40777,6741334097,3112051085,484,14,120,7,'M'),
+('Phil','Beyer','Antioquía',97,9,'Bosques de la Primavera',81703,2320848327,3113589933,484,14,120,33,'F'),
+('Teador','Scud','Antofagasta',480,7,'Bosques Del Centinela I',92911,6529290006,3115147922,484,14,120,29,'F'),
+('Debor','Ferrarone','Avenida Américas',253,6,'Bosques Del Centinela II',73202,8365968047,3119427031,484,14,120,6,'F'),
+('Gail','McGougan','Avenida de la Patria',41,3,'Bosques del Centinela III',83036,6751645131,3113163088,484,14,120,29,'M'),
+('Lanita','Ellins','Fenicios',412,4,'Bosques de San Isidro',57294,2719636496,3114316981,484,14,120,6,'N'),
+('Dolli','Garfitt','Fermín Riestra',796,7,'Bosques de Zapopan',36671,5425399001,3117499295,484,14,120,7,'A'),
+('Carolyn','Bitcheno','Gómez Cuervo',833,2,'Bosque Valdepeñas',26609,6802625332,3119883269,484,14,120,45,'S'),
+('Odo','Boor','Hetitas',432,3,'Callejón del Parque',56261,6526010706,3112224577,484,14,120,22,'S'),
+('Anthiathia','Foulcher','Maracaibo',511,7,'Camichines Vallarta',78689,6960505808,3116176533,484,14,120,1,'S'),
+('Quinta','Hatherell','Medas',683,6,'Camino Real',31372,8942524404,3113186386,484,14,120,33,'M'),
+('Heather','Drains','Patria',459,9,'Campestre Los Robles',16068,2308489985,3111030025,484,14,120,18,'M'),
+('Laney','Lebbern','Romanos',657,5,'Campo Real',69490,2715330316,3112905920,484,14,120,21,'N'),
+('Normand','Inge','Santa Fe',351,2,'Cañadas de San Lorenzo',78332,1584498188,3111541328,484,14,120,45,'C'),
+('Ibrahim','Fussie','Tucumán',902,3,'Carlos Rivera',11570,4278695241,3119523424,484,14,120,7,'A'),
+('Aksel','Dowd','Avenida Piotr Ilich Tchaikovsky',280,4,'Centro de Investigación y de Estudios Avanzados',78232,3745627037,3117554900,484,14,120,33,'C'),
+('Perceval','Doudny','Comerciantes',567,6,'Chapalita de Occidente',21909,6639506435,3115003739,484,14,120,22,'S'),
+('Hartwell','Janicijevic','Ecónomos',861,2,'Chapalita Inn',52774,1418863215,3113943277,484,14,120,29,'A'),
+('Durante','Baudinelli','Felix Mendelssohn',23,5,'Chapalita las Fuentes',36819,1887644693,3115279321,484,14,120,4,'C'),
+('Damaris','Dickerline','Franz Schubert',851,3,'Chapalita Oriente',32270,4134003239,3118422273,484,14,120,4,'S'),
+('Jory','Reddyhoff','Independencia',259,10,'Chapalita Sur',84440,7657466966,3119573617,484,14,120,1,'F'),
+('Georgi','Bahlmann','Johannes Brahms',656,9,'Citala',99655,4640662683,3117144375,484,14,120,37,'F'),
+('Ralf','Yewdall','Paseo del Sereno',284,8,'Ciudad Del Sol',24572,9179607752,3114740008,484,14,120,37,'N'),
+('Chandra','Slark','Piotr Ilich Tchaikovsky',768,10,'Ciudad Granja',95213,1853028743,3111038449,484,14,120,4,'C'),
+('Lydon','Lyburn','Robert Schumann',791,6,'Ciudad Judicial Federal',46920,4704282244,3112972456,484,14,120,33,'A'),
+('Ronna','Wyeld','Atlas Colomos',933,10,'Colegio Del Aire',32904,9420243903,3115900316,484,14,120,18,'C'),
+('Cherilyn','Kynsey','Avenida de la Patria',592,7,'Colina de los Robles',89309,9704351436,3111408372,484,14,120,18,'S'),
+('Bay','Paolone','Paseo Blvd Lomas del Bosque',356,10,'Colinas de Atemajac',16523,3592388892,3112293938,484,14,120,14,'N'),
+('Shane','Skirven','Paseo Lomas del Bosque',567,7,'Colinas de La Primavera',71504,3500225565,3116270109,484,14,120,4,'C'),
+('Germain','Bamlett','Patria',78,5,'Colinas de Las Águilas',49911,1381829108,3118078986,484,14,120,45,'A'),
+('Stewart','Nottram','Residentes',426,2,'Colinas Del Centinela',30641,2328316595,3111013801,484,14,120,29,'N'),
+('Farand','Valdes','Visitantes',756,1,'Colinas de los Belenes',36281,5407646992,3112703500,484,14,120,27,'C'),
+('Nikolaus','McCafferky','Aldous Huxley',875,9,'Colinas de San Javier',14519,4675177652,3118098194,484,14,120,21,'A'),
+('Charita','Kenworthy','Av. Naciones Unidas',11,1,'Colinas de Tabachines',92605,8576462947,3115969825,484,14,120,20,'F'),
+('Gregoire','Culshaw','David H. Lawrence',232,7,'Colli Sitio',23892,1585948463,3116774709,484,14,120,38,'C'),
+('Perry','Caskey','Juan Palomar y Arias',646,2,'Conjunto Habitacional Laureles',59152,7474069986,3115552703,484,14,120,1,'A'),
+('Hallsy','Marven','León Tolstoi',289,4,'Conjunto Ritz',66190,9739670362,3115016391,484,14,120,20,'N'),
+('Alistair','Purkis','Ricardo Güiraldes',774,8,'Conjunto Seattle',25063,6059306780,3111856394,484,14,120,21,'S'),
+('Mic','Fryer','AvenidaCentral',847,9,'Conjunto Zapopan',83019,2085378409,3114662174,484,14,120,7,'F'),
+('Sandor','Haacker','Calzada Central',63,2,'Constitución',40057,4602007159,3113860778,484,14,120,7,'C'),
+('Ed','Dudleston','Calzada Circunvalación Oriente',583,9,'Constituyentes',10519,5116436006,3111899627,484,14,120,29,'S'),
+('Glennie','Flageul','Calzada Circunvalación Poniente - María Guadalupe García Zavala',199,9,'Coronilla Del Ocote',83654,7746265286,3119223299,484,14,120,21,'F'),
+('Jayme','Bassindale','Calzada de las Palmas',589,7,'Coto Del Rey',62694,4481459505,3114221100,484,14,120,14,'C'),
+('Cherish','Putland','Calzada de los Álamos',516,3,'Coto Miraflores',79122,3751218461,3118154372,484,14,120,38,'F'),
+('Elroy','Ludlamme','Calzada de los Cedros',322,2,'Coto Residencial 2000',26009,9856726576,3113373045,484,14,120,27,'F'),
+('Kellia','Brimfield','Calzada de los Cipreses',745,5,'Crucero de La Mesa',14222,3787917933,3116329951,484,14,120,21,'A'),
+('Correy','Stoffer','Calzada de los Fresnos',898,4,'CUCEA Universidad de Guadalajara',49798,1381939286,3117015861,484,14,120,21,'C'),
+('Godfry','Wyldes','Calzada de los Paraisos',618,2,'Cumbres',80000,3357688204,3113488793,484,14,120,20,'F'),
+('Rhiamon','Reedie','Calzada Norte',549,9,'Del Federalismo',32054,8319487291,3119792385,484,14,120,45,'C'),
+('Patty','Gosby','Pirules',766,9,'División del Norte',89405,5931018631,3113307470,484,14,120,21,'N'),
+('Ursa','Letteresse','Avenida Moctezuma',878,2,'Don Bosco Vallarta',77790,1170082878,3114269342,484,14,120,6,'M'),
+('Nelie','Vauls','Avenida Patria',988,6,'Ecológica Seattle',84674,3554043963,3116858392,484,14,120,20,'M'),
+('Franz','Reardon','Avenida Patria Sur',845,2,'Ejido de Zoquiapan',35490,5786395600,3113006083,484,14,120,27,'C'),
+('Fleming','Bowkley','Carlos L. Gracidas',527,4,'El Bajío',68430,7980902985,3117421392,484,14,120,22,'M'),
+('Arlinda','Philipson','Chimalpopoca',605,1,'El Batan',14930,9429412301,3116328728,484,14,120,1,'C'),
+('Kennedy','Guilford','Cordilleras - Clouthier',52,8,'El Borrego',54595,4694768259,3112905342,484,14,120,6,'A'),
+('Vasilis','Gherardesci','Kinchahua',550,1,'El Bosque',47158,3764606744,3111087269,484,14,120,29,'F'),
+('Deborah','Atkyns','Kinichahua',268,9,'El Capullo',21611,7589473822,3113691615,484,14,120,20,'A'),
+('Iver','Gravenor','Volcán Ajusco',850,3,'El Carrizal',75320,8831772699,3119218365,484,14,120,45,'A'),
+('Cosetta','Cote','Volcán Citlatépetl',683,9,'El Centinela',33195,3989980719,3116666118,484,14,120,33,'A'),
+('Becka','Myatt','Volcán de Fuego',151,4,'El Colli 1a Secc',19263,3389431339,3119135390,484,14,120,22,'F'),
+('Putnam','Gennerich','Volcán Peña Nevada',487,8,'El Colli 2a Secc',92220,3767264171,3119672410,484,14,120,22,'F'),
+('Lian','Benech','Yaxuma',717,2,'El Colli Ejidal',63719,2629711539,3117729456,484,14,120,7,'S'),
+('Meryl','Brydell','Beatríz Hernández',313,7,'El Colli INFONAVIT',23225,6506638041,3116987579,484,14,120,22,'M'),
+('Nissa','Redshaw','Colina Albea',654,5,'El Colli Primavera',91929,7996754408,3114612482,484,14,120,21,'C'),
+('Dorella','Lawrenceson','Fidel Velázquez Sánchez',420,5,'El Colli Urbano 1a. Sección',95608,1754404602,3113869098,484,14,120,33,'M'),
+('Gaby','Feake','Lago Constanza',758,8,'El Colli Urbano 2a. sección',55682,5423827568,3112483133,484,14,120,22,'F'),
+('Humfrey','Hanning','Lago Ginebra',286,9,'El Fortín',20749,7313579459,3113199634,484,14,120,4,'S'),
+('Doy','Chantler','Lago Superior',276,6,'El Fresno',21451,4046407893,3117135724,484,14,120,33,'S');
+
+--INSERTAR REGISTROS EN DBO.DIRECTORIO DEL ESTADO DE SINALOA
+INSERT INTO dbo.Directorio VALUES
+('Erek','Lilleycrop','Ahome',156,6,'10 de Mayo',42950,8481469412,3118295843,484,25,1,12,'C'),
+('Noby','Fursey','Álvaro Obregón',521,3,'12 de Octubre',89288,8900015302,3112461149,484,25,1,8,'N'),
+('Humfrey','Mariel','Anastasio Armenta',48,5,'18 de Marzo',45547,9380462683,3116497278,484,25,1,8,'A'),
+('Anson','Felder','Ángel Flores',281,10,'20 de Noviembre Nuevo',87340,1854144590,3116302677,484,25,1,15,'S'),
+('Mel','Emerine','Antonio Rosales',937,8,'20 de Noviembre Viejo',71094,3008566792,3113919400,484,25,1,10,'C'),
+('Jenna','Gleed','Aquiles Serdán',335,8,'24 de Febrero',96816,4685469448,3115162482,484,25,1,8,'F'),
+('Diarmid','Esmead','Belisario Domínguez',683,3,'28 de Junio',91257,3377962978,3116831229,484,25,1,5,'C'),
+('Shepard','Cramond','Benito Juárez',497,10,'5 de Mayo',80360,2990513246,3116000338,484,25,1,7,'S'),
+('Belle','Guerre','Ceiba',470,9,'75 (Heriberto Valdez Romero)',40028,5103774640,3117321926,484,25,1,15,'M'),
+('Kasey','Bumpas','Central',911,5,'9 de Diciembre',76130,7871908211,3112185817,484,25,1,2,'S'),
+('Basile','Spering','Churubusco',54,5,'Adolfo Lopez Mateos',23516,8628883981,3116247539,484,25,1,9,'C'),
+('Waite','Chatell','Ciprés',450,3,'Aduana',32707,3912456953,3119919357,484,25,1,12,'C'),
+('Loreen','Matessian','Constitución',738,4,'Agua Nueva',46979,4825329935,3116075966,484,25,1,8,'A'),
+('Anatole','Friend','Corregidora',482,3,'Águila Azteca',16735,2442145680,3111835629,484,25,1,11,'C'),
+('Gratia','Zealander','Defensa Del Río',688,6,'Ahome Centro',12443,7740776923,3114741428,484,25,1,4,'M'),
+('Rodge','Asple','De La Conasupo',464,5,'Ahome Independencia',43502,9187772384,3112070431,484,25,1,7,'N'),
+('Corbin','Atherley','De La Iglesia',29,7,'Ahome Independiente',76596,2632183970,3115134389,484,25,1,7,'S'),
+('Valery','Swadon','De Los Maestros',114,8,'Álamo',34415,8309320462,3112134024,484,25,1,4,'M'),
+('Muffin','Layus','Dora Ayón',642,2,'Álamos',48129,7102665797,3113723805,484,25,1,1,'M'),
+('Rosalie','Cosens','Dos De Abril',643,4,'Álamos Country',23327,4207129221,3113128955,484,25,1,12,'N'),
+('Deane','Millam','Emiliano Zapata',564,1,'Álamos I',56471,5751141993,3112799418,484,25,1,7,'M'),
+('Ed','Bodycote','Ernesto Gómez',780,10,'Álamos II',42553,1620299924,3111574158,484,25,1,8,'C'),
+('Aleda','Spencley','Eucalipto',838,10,'Albergue Louisiana',89360,4673429956,3117806697,484,25,1,9,'M'),
+('Gwennie','Openshaw','Felipe Moreno',199,5,'Alejandro Peña',47532,6876908513,3117316980,484,25,1,8,'C'),
+('Zondra','Sillick','Flores Magón',556,2,'Alfonso G Calderón',88117,6461356128,3118020327,484,25,1,11,'S'),
+('Adriena','Spadari','Francisco I. Madero',28,1,'Alfredo Salazar',41022,4803967589,3112275000,484,25,1,10,'M'),
+('Gabby','Hair','Francisco Javier Mina',524,9,'Alma Guadalupe Estrada',94954,4372203407,3114550547,484,25,1,12,'F'),
+('Martin','Moyle','Francisco Labastida Ochoa',175,8,'Almendras',40065,8019475870,3113988398,484,25,1,2,'N'),
+('Johnna','Lomasney','Gabriel Leyva',614,2,'Americana',27886,5699796555,3111788667,484,25,1,4,'N'),
+('Karlis','Zecchinii','General José María Ochoa',22,7,'Ampliación Burócrata',74357,7026319609,3114300577,484,25,1,9,'M'),
+('Poppy','Smee','Guadalupe Victoria',746,1,'Ampliación Nuevo Siglo',17141,8018395623,3117270867,484,25,1,10,'N'),
+('Nanon','Sterman','Ignacio Allende',341,8,'Anáhuac',97822,9780514442,3117660337,484,25,1,5,'S'),
+('Bennie','Eastbrook','Ignacio Zaragoza',748,9,'Antonio Toledo Corro',36915,5479216638,3117675269,484,25,1,3,'S'),
+('Wilton','Wall','Independencia',13,2,'Antonio Toledo Corro',47014,9942810743,3114485260,484,25,1,13,'M'),
+('Pearla','Kield','José Luis López',964,5,'Ávila Corona',62963,2210949755,3113215392,484,25,1,9,'M'),
+('Corby','Castellet','José María Morelos Y Pavón',854,6,'Azucena',53084,7278052336,3114306005,484,25,1,4,'N'),
+('Chrissy','Benthall','La Alameda',582,4,'Bacaporobampo',66935,4010519184,3119141170,484,25,1,10,'C'),
+('Bran','MacNalley','Lauro Berrelleza',753,6,'Bachomobampo 1',47611,6794102758,3119007139,484,25,1,11,'F'),
+('Mara','Trever','Lázaro Cárdenas',635,3,'Bachomobampo 2',30770,9715132703,3114009897,484,25,1,1,'N'),
+('Keri','Tollow','Matamoros',760,5,'Bachomo Infonavit',37381,3523104942,3113609005,484,25,1,11,'F'),
+('Jessica','Van Velde','Miguel Hidalgo Y Costilla',755,2,'Bacorehuis',99702,8134320771,3114154994,484,25,1,7,'N'),
+('Jarid','Kennham','Mochis-Ahome',235,2,'Bagojo Colectivo',26394,3827337933,3119154990,484,25,1,7,'F'),
+('Pacorro','Torri','Narciso Mendoza',919,3,'Bagojo del Río (Bombas Aguilas)',50968,2310289094,3119067975,484,25,1,11,'N'),
+('Blakelee','Doggett','Ninguno',773,5,'Bajada de San Miguel',53903,6058542826,3116576387,484,25,1,4,'F'),
+('Zulema','MacMurray','Niños Héroes',907,9,'Banamex',11749,8691903482,3118621934,484,25,1,7,'A'),
+('Giovanni','Turmel','Olas Altas',142,10,'Barrio Estándar',90552,6902470953,3111756621,484,25,1,1,'A'),
+('Jeromy','Dominiak','Oscar Monzón Molina',416,4,'Bellavista',67537,6983626373,3119587040,484,25,1,10,'F'),
+('Storm','Riddall','Principal',806,7,'Benito Juárez',87617,9771218086,3115417497,484,25,1,5,'S'),
+('Tiphany','Widger','Ramón Ignacio Rodrigo Castro',109,3,'Benito Juárez',93337,5803629659,3111576994,484,25,1,5,'C'),
+('Jamison','Rambadt','Rosendo G. Castro',823,9,'Benito Juárez',30523,9198924928,3119568469,484,25,1,9,'F'),
+('Wilmette','Aspling','Rubén Vega',219,10,'Bienestar',35875,7599245551,3111563125,484,25,1,14,'N'),
+('Leoine','Lawtie','Sinaloa',669,5,'Bolsa de Tosalibampo 1',82298,9484449276,3117917912,484,25,1,8,'N'),
+('Freda','Langer','Tirso Inzunza',54,10,'Bolsa de Tozalibampo Dos',10723,2673293920,3116205724,484,25,1,12,'M'),
+('Yuma','Crim','Venustiano Carranza',201,4,'Bosque del Real',67143,2257330093,3116321578,484,25,1,10,'S'),
+('Matthus','Poulett','Vicente Guerrero',422,9,'Bosques Del Country',28178,9728268347,3116122944,484,25,1,14,'C'),
+('Alfi','Maylam','Loftsgordon',952,9,'Bosques del Pedregal',91934,7571390716,3111672549,484,25,1,5,'S'),
+('Currie','Kersting','Garrison',837,6,'Buenavista',64219,8499765343,3113606228,484,25,1,2,'F'),
+('Lenora','Daen','Lakewood',972,5,'Bugambilias',14225,1271836843,3111910107,484,25,1,13,'N'),
+('Fifi','Van de Vlies','Dawn',602,3,'Burócrata',75455,7195053394,3119314763,484,25,1,15,'S'),
+('Georgianna','Aulsford','Lighthouse Bay',570,3,'Cachoana',70293,1496495590,3114489293,484,25,1,3,'A'),
+('Andree','Saint','Fulton',715,7,'Camelias',61058,3352677874,3117886128,484,25,1,7,'A'),
+('Gratia','Beadle','Homewood',640,6,'Campanario',84088,6759039448,3116812023,484,25,1,3,'F'),
+('Newton','Bigrigg','Springview',764,10,'Campo Gastelum',80849,5076135097,3113518551,484,25,1,13,'F'),
+('Barrie','Dansie','Northland',688,8,'Campo La Arrocera',96934,7862574124,3116034228,484,25,1,8,'M'),
+('Sancho','Fray','Bellgrove',770,7,'Capilla San José',91691,4568042983,3112295005,484,25,1,15,'C'),
+('Marna','Rignoldes','North',429,1,'Carolina Residencial',24601,3875434487,3111247655,484,25,1,14,'N'),
+('Tito','Yalden','Bluejay',671,2,'Cartolandia',97636,5382658893,3119417638,484,25,1,1,'M'),
+('Elly','Sharpous','John Wall',698,9,'Catarinas',50512,7975958367,3112361870,484,25,1,12,'A'),
+('Margareta','Thewlis','Vera',41,2,'Cedros',70881,4230148143,3116699585,484,25,1,13,'S'),
+('Moore','Gilpillan','Buhler',884,5,'Central de Abastos',65437,6638841812,3113810310,484,25,1,15,'M'),
+('Ethelred','Dullard','Thackeray',473,2,'Centro Plaza Mochis',77063,8463728094,3112048399,484,25,1,8,'S'),
+('Storm','Moxon','Marquette',748,7,'Cereso Nuevo',30987,9639550127,3119358517,484,25,1,13,'C'),
+('Blondy','Fuzzey','Dapin',299,6,'Cerrillos (campo 35)',80870,5633675719,3117223774,484,25,1,15,'F'),
+('Meredith','Fashion','Victoria',996,9,'CET Mar',68552,6007147163,3116344148,484,25,1,9,'M'),
+('Johnathon','Densham','Troy',97,2,'Chihuahuita',56166,5287215723,3117212526,484,25,1,3,'N'),
+('Egor','Tutchings','Kipling',861,9,'Choacahui',11600,7393297754,3113324134,484,25,1,6,'S'),
+('Jeana','Richford','Harper',301,5,'Club de Leones',32866,9915999792,3115943802,484,25,1,4,'F'),
+('Irwinn','Jickles','Scott',49,7,'Cohuibampo',23285,1753217181,3116698037,484,25,1,13,'F'),
+('Lorrie','Guillart','Ruskin',890,6,'Colon',73737,3186239598,3117392259,484,25,1,15,'C'),
+('Audra','Hamm','Jackson',28,6,'Compuertas O 21 de Septiembre',64944,8743909538,3116927932,484,25,1,12,'F'),
+('Celene','Chessell','Bartillon',90,1,'Conquistadores',45261,5674221968,3112635684,484,25,1,8,'A'),
+('Mia','Lapley','Boyd',977,3,'Cuauhtémoc',3463,5397775179,3118650150,484,25,1,7,'N'),
+('Henrie','Harmond','Elmside',613,8,'Cuchilla de Cachoana',73831,4036348310,3117647386,484,25,1,13,'C'),
+('Susi','Pether','Sutteridge',800,9,'Daniel Biul Ruelas',24898,7060378468,3116595075,484,25,1,8,'M'),
+('Hayley','Pee','Shopko',584,1,'Del Carmen',22205,8302522830,3117291100,484,25,1,5,'C'),
+('Leonhard','Averall','Memorial',903,9,'Del Parque',78095,2580830416,3118776519,484,25,1,12,'C'),
+('Maggie','Cullerne','Meadow Vale',985,3,'Del Real',80497,2823403082,3117216982,484,25,1,2,'A'),
+('Delphinia','Niblett','Fairfield',792,3,'Deportivo Country Club',64733,2759158345,3113016730,484,25,1,2,'M'),
+('Glori','Muscat','Stone Corner',500,6,'Deportivo y Rincón',45764,5362989762,3119950174,484,25,1,10,'S'),
+('Beauregard','Ducastel','Harper',731,5,'Diamantes 2a Sección',93071,8190682500,3113327857,484,25,1,8,'F'),
+('Carley','Jaqueminet','Huxley',644,9,'Dolores Castro',48752,9647253468,3113105486,484,25,1,8,'C'),
+('August','Pedersen','Aberg',215,6,'Dolores Hidalgo',83876,3162599571,3119922896,484,25,1,9,'S'),
+('Stephanie','Stryde','Sunfield',431,9,'Ejidal',56862,6188554644,3119557868,484,25,1,14,'F'),
+('Jose','Giacomasso','Village Green',99,7,'El Aguajito',71419,6868372400,3114282407,484,25,1,8,'C'),
+('Bamby','Klambt','Mockingbird',554,10,'El Alhuate',76363,3455996054,3117801864,484,25,1,12,'F'),
+('Winn','Keeffe','Myrtle',11,2,'El Bule',70644,7986511292,3117517279,484,25,1,8,'A'),
+('Maury','Drought','Browning',703,7,'El Chamizal',48127,3115808826,3113786937,484,25,1,10,'F'),
+('Lucais','Bownde','Southridge',724,7,'El Colorado',91520,6336444056,3112658623,484,25,1,7,'S'),
+('Trula','Jeske','Elka',618,6,'El Dorado',73242,4089684705,3114462231,484,25,1,15,'A'),
+('Becky','Lodford','Daystar',436,5,'El Estero',38184,1797493830,3116045673,484,25,1,11,'F');
+
+--INSERTAR REGISTROS EN DBO.DIRECTORIO DEL ESTADO DE SONORA
+INSERT INTO dbo.Directorio VALUES
+('Griffy','Danskine','Aconchi',551,1,'Agronomos',92951,9106976942,3117684493,484,26,40,10,'N'),
+('Hank','Stebbings','Alamo',180,3,'Alameda del Cedro',96678,4938572529,3111711756,484,26,40,8,'N'),
+('Martin','Enever','Altar',429,10,'Alameda del Cedro II',11283,6691650013,3116824745,484,26,40,14,'M'),
+('Esther','Bohills','Arizpe',420,9,'Algodones',27482,2018103117,3113755734,484,26,40,14,'F'),
+('Chloris','Teal','Avendia Tetabiate',12,7,'Alta California',77516,6636870948,3115097667,484,26,40,12,'A'),
+('Erinn','Feltham','Avenida Cajeme',154,4,'Altar Residencial',41450,7226291158,3118980789,484,26,40,11,'C'),
+('Mandi','Scryne','Avenida Norte',15,10,'Amanecer 1',80263,8405534362,3112540360,484,26,40,5,'A'),
+('Mil','Cordeix','Avenida Tetabiate',179,3,'Amanecer 2',39268,2076493570,3116893782,484,26,40,4,'N'),
+('Sande','Zmitrovich','Bacoachi',939,10,'Ampliación Miguel Alemán',88484,3697201494,3117126558,484,26,40,2,'C'),
+('Cyrus','Hovey','Banámichi',345,6,'Ampliación Miravalle',42911,5467432515,3111005850,484,26,40,2,'M'),
+('Nelie','Kix','Baviácora',379,7,'Aves Del Castillo',81935,3139881513,3112499908,484,26,40,11,'M'),
+('Sigismondo','Lidgett','Bordo Canal Bajo',659,3,'Bellavista',66941,7552965065,3116726772,484,26,40,12,'N'),
+('Roderigo','Warrack','California',962,5,'Benito Juárez',56450,351856982.,3113892477,484,26,40,6,'F'),
+('Dorine','Blues','Callejón Vicente Guerrero',985,10,'Bosque Del Nainari',83229,7423927049,3118907890,484,26,40,5,'A'),
+('Kandace','Ilyas','Albizia',409,4,'Bugambilias',13150,6670426675,3119838018,484,26,40,15,'F'),
+('Tressa','Linthead','Avenida Jesús García Corona',428,4,'Cajeme',21090,3286722769,3117992976,484,26,40,5,'A'),
+('Mitchael','Davidescu','Avenida Oasis',487,10,'Campanario',73533,4495791004,3117140423,484,26,40,13,'C'),
+('Patsy','Pickersgill','Canes',663,7,'Campestre',78198,4774799498,3116353669,484,26,40,9,'M'),
+('Daniel','MacKill','Cerrada Bolzano',25,1,'Campestre 2da. Ampliación',37730,8705543588,3118580119,484,26,40,6,'S'),
+('Remington','Manie','Cerrada Iseo Este',946,8,'Casa Blanca',47630,2534808407,3111806656,484,26,40,9,'S'),
+('Christabella','Rozet','Cerrada Iseo Oeste',234,8,'Casa Blanca Ampliación II',85899,9305697063,3118475163,484,26,40,9,'A'),
+('Oralia','Trinbey','Cerrada Toscana',935,10,'Casa Real',61798,7819610283,3115730980,484,26,40,10,'F'),
+('Gaylord','Roswarn','Del Moral',837,5,'Cd. Obregón (Ciudad Obregón)',91841,4003738512,3117479562,484,26,40,9,'N'),
+('Sonnie','Pattle','Edrino',89,1,'Central de Abastos',60276,1659322500,3113479138,484,26,40,13,'C'),
+('Teador','Dosedale','Enebro',266,8,'Chapultepec',91411,2543580665,3119784144,484,26,40,2,'M'),
+('Arabela','Larrington','Isla de Capri',576,5,'Chihuahua',52627,4591547445,3114914846,484,26,40,4,'M'),
+('Carling','Mennithorp','Isola',830,5,'Cincuentenario',84519,2198882234,3118822946,484,26,40,7,'S'),
+('Floria','Schutter','Montecarlo',993,5,'Ciudad Obregón Centro (Fundo Legal)',42731,1891315037,3115794578,484,26,40,8,'A'),
+('Elbertine','Dickon','Montecasino',176,8,'Colinas del Yaqui',58827,5940534576,3119257534,484,26,40,4,'M'),
+('Ami','Llewellen','Nápoles',890,4,'Constitución',33019,8884862684,3112010268,484,26,40,6,'A'),
+('Kailey','Budgen','Okume',36,10,'Cortinas 1ra. Sección',14054,4969005689,3114718590,484,26,40,7,'M'),
+('Saleem','Mulleary','Privada Antibes',943,6,'Cortinas 2da. Sección',37003,7050189971,3113585965,484,26,40,10,'N'),
+('Abramo','La Batie','Privada Arezo',458,7,'Cortinas 3ra. Sección',34268,3937714019,3111275744,484,26,40,12,'A'),
+('Ynes','Meadmore','Privada Bosena',614,8,'Cortinas 4ta. Sección',99827,5148620974,3113591833,484,26,40,2,'C'),
+('Denys','Cronkshaw','Privada Charlote',169,9,'Cuauhtémoc Cárdenas',64215,4752539990,3112533498,484,26,40,9,'C'),
+('Chloe','Khosa','Privada Cosenza',393,6,'Cuauhtémoc (Urbanizable 6)',88983,4198910825,3117271273,484,26,40,2,'A'),
+('Terri-jo','Sotheron','Privada Lido',988,7,'Cumuripa',31170,6684120308,3114169782,484,26,40,6,'M'),
+('Lesya','Capstake','Privada Livoria',918,4,'Cumuripa',52274,9458492202,3117907784,484,26,40,6,'F'),
+('Moshe','Tittletross','Privada Lombardía',243,1,'Del Bosque',99324,1449108522,3116070468,484,26,40,9,'S'),
+('Felicia','Gregori','Privada Maggiore',956,2,'Del Lago',54011,3131309080,3119566456,484,26,40,3,'M'),
+('Yoko','Towse','Privada Mónaco',977,10,'Del Valle',31093,5857424582,3112030574,484,26,40,6,'N'),
+('Ulises','Klampt','Privada Napoli',714,5,'Ejidatarios',66654,4850582961,3118275896,484,26,40,15,'N'),
+('Fiona','Nelthorp','Privada Palermo',241,5,'Ejido Cajeme',34939,3955763952,3115145035,484,26,40,2,'M'),
+('Lilly','Ferrand','Privada Pisa',152,5,'Electricista',87253,2316308364,3116066447,484,26,40,3,'A'),
+('Siouxie','Hodinton','Privada Rieti',716,2,'El Paraíso',16918,6543075940,3119308161,484,26,40,12,'A'),
+('Hermy','Prover','Privada Roma',986,8,'El Roble',70363,6186070272,3113470792,484,26,40,9,'M'),
+('Edwin','Rodson','Privada Salermo',48,1,'El Rodeo',77101,1289948969,3119285598,484,26,40,9,'F'),
+('Marlena','Skittrell','Privada Sicilia',997,7,'Esperanza Tiznada',43980,3464903684,3112567046,484,26,40,5,'F'),
+('Ruperta','Yeatman','Privada St. Remo',924,8,'Faustino Félix Serna',50815,7820686066,3117106260,484,26,40,8,'C'),
+('Chick','Pegg','Privada Vesubio',145,5,'Fovissste',68372,4412663968,3111287079,484,26,40,1,'N'),
+('Siegfried','Pettett','Privada Vinadio',951,6,'Fovissste 2',72359,6263355099,3115728896,484,26,40,5,'N'),
+('Antonia','Shovlin','Rodolfo Elías Calles',37,1,'Fovissste 3',59962,4239237079,3115065022,484,26,40,12,'A'),
+('Fair','Westney','Sauco',534,5,'Francisco Eusebio Kino',88033,6611620649,3112043400,484,26,40,4,'N'),
+('Rivkah','Flieger','Avendia 6 de Abril',448,10,'Franja Comercial 300',94164,2598692778,3118659955,484,26,40,11,'N'),
+('Dorise','Stainburn','Avenida Hermenegildo Galeana',194,6,'Fuentes Del Bosque',14427,3196242866,3115035378,484,26,40,15,'C'),
+('Rickey','Abbado','Avenida Jesús García Corona',290,6,'Galeana',80294,8789137049,3116506266,484,26,40,10,'S'),
+('Gerty','Tschersich','Avenida Niños Héroes',322,2,'Girasoles',14632,7911175322,3116097144,484,26,40,4,'C'),
+('Noelle','Vallantine','California',419,5,'Granjas FOVISSSTE Norte (Codornices)',54101,6437873282,3116734711,484,26,40,14,'C'),
+('Urbain','Inge','CAllejón 20 de Noviembre',287,10,'Hacienda Del Sol',54960,9999674597,3112722809,484,26,40,10,'A'),
+('Julius','Sabatini','Colima',639,2,'Hacienda Real',63550,8780002479,3112232991,484,26,40,13,'F'),
+('Kacy','Gorrick','Durango',845,3,'Haciendas El Rosario',39807,9819245336,3118438621,484,26,40,12,'A'),
+('Marika','Croser','Eje Vial Coahuila',765,8,'Haciendas San Francisco',92972,5758401439,3112098808,484,26,40,2,'M'),
+('Guinevere','Lockhead','Eje Vial Tabasco',956,10,'Haciendas San Miguel',54483,4103507686,3119630132,484,26,40,3,'S'),
+('Katee','Roelvink','Avenida C. T. M.',632,4,'Herradura',43332,3366921262,3111559479,484,26,40,8,'C'),
+('Rene','Gilson','Coahuila',801,1,'Hidalgo',36718,4040336119,3111679192,484,26,40,11,'S'),
+('Brig','Dorkens','Ejército Nacional',757,3,'Infonavit',92278,3910738347,3116024987,484,26,40,3,'F'),
+('Becky','Martinuzzi','Emeterio Ochoa',927,10,'ISSSTESON',61232,1170879062,3111666649,484,26,40,13,'S'),
+('Coralyn','Flaherty','Guásimo',316,3,'Jardines Del Valle',21650,5173438996,3111196905,484,26,40,3,'F'),
+('Ursula','Kubera','Norman E. Borlaug',44,6,'Ladrillera',84379,2185686986,3115887591,484,26,40,6,'S'),
+('Trefor','Boldt','Avenida Ignacio Allende',185,5,'La Florida',87087,5291109354,3112021110,484,26,40,9,'C'),
+('Son','Wickett','Avenida José María Morelos y Pavón',982,6,'La Joya Villa California IV',45488,5315310180,3117027853,484,26,40,7,'M'),
+('Anatola','Maple','Avenida Náinari',668,9,'La Misión',22177,7494011721,3117351255,484,26,40,8,'M'),
+('Dayle','Simko','Avenida Yaqui',200,8,'La Reforma',37449,1188687994,3116432525,484,26,40,11,'S'),
+('Shellie','Denyakin','Bordo Prieto',978,5,'Las Arboledas',10925,3584230356,3118242230,484,26,40,2,'A'),
+('Phylys','Josefovic','José Angel Santillán Arias',88,5,'Las Brisas',61631,9624445646,3111234705,484,26,40,2,'M'),
+('Karlen','Woofendell','Lago Antrona',440,10,'Las Campanas',71082,8210813336,3117234411,484,26,40,9,'S'),
+('Cassaundra','Gleeton','Lago Aral',2,5,'Las Espigas',92299,1889377255,3117887378,484,26,40,4,'A'),
+('Patrice','Neaverson','Lago Baikal',361,8,'Las Flores',23067,1750756713,3115392632,484,26,40,7,'S'),
+('Dallas','Adanet','Lago Balkash',718,2,'Las Fuentes',57890,6194834299,3112940946,484,26,40,5,'M'),
+('Martyn','Davidof','Lago Eric',757,2,'Las Fuentes II',34432,1805672670,3117456953,484,26,40,8,'C'),
+('Barbe','Stanbro','Lago Erome',258,4,'Las Haciendas',98283,4133100264,3117727779,484,26,40,1,'S'),
+('Lacie','Pelzer','Lago Hurón',895,4,'Las Misiones',52458,2736442581,3112630351,484,26,40,2,'A'),
+('Henri','Postin','Lago Ladoga',879,2,'Las Palmas',46337,5595049384,3116353520,484,26,40,11,'A'),
+('Wheeler','Ferreras','Lago Margeleno',574,9,'Las Puertas',34837,3003248527,3116312269,484,26,40,8,'C'),
+('Francine','Godilington','Lago Onega',577,5,'Las Torres',62052,6576576468,3113594654,484,26,40,7,'F'),
+('Jase','Warrender','Lago Ontario',120,8,'Lázaro Mercado',79296,4512651094,3113683952,484,26,40,2,'F'),
+('Chelsy','Bewick','Lago Osos',802,7,'Libertad',66061,6699834279,3119324002,484,26,40,7,'C'),
+('Rafaela','Cowoppe','Lago Sils',211,8,'Linda Vista',32929,3702983338,3119315070,484,26,40,6,'A'),
+('Calida','Thurnham','Lago Silva Plana',845,6,'Los Álamos 1',52434,3677888234,3114132975,484,26,40,3,'A'),
+('Jamil','Bowness','Lago Superior',574,2,'Los Álamos 2',27831,2735813576,3112901110,484,26,40,6,'A'),
+('Dell','Rossoni','Lago Tataros',639,3,'Los Alisos',97286,9175855679,3119694358,484,26,40,7,'A'),
+('Lyle','Longhurst','Lago Van',529,4,'Los Angeles',64922,5976223432,3112523419,484,26,40,1,'S'),
+('Genny','Gotcher','Manuel Esperón',735,4,'Los Arcos',59149,2312106200,3111433391,484,26,40,2,'M'),
+('Conan','Colledge','Maracaibo',857,7,'Los Encinos',27759,9511629623,3116270807,484,26,40,11,'S'),
+('Brittani','Dupoy','MEX 15D',53,10,'Los Encinos II',90426,2550031260,3116318236,484,26,40,1,'M'),
+('Glenda','Guyonneau','Palo Blanco',947,7,'Los Olivos',42495,4360184933,3116151915,484,26,40,15,'F'),
+('Piper','Carnihan','Palo Dulce',423,4,'Los Patios',30488,6010900923,3114677444,484,26,40,1,'M'),
+('Deane','Bonder','Palo Santo',55,7,'Los Portales',79760,5655832647,3115595708,484,26,40,15,'S'),
+('Amalee','Charters','Pitahaya',44,2,'Los Presidentes',56323,7754290580,3115329378,484,26,40,11,'A'),
+('Franciskus','Atchly','Rodolfo Campodónico',436,8,'Los Sauces',19959,1196716195,3111774658,484,26,40,7,'F');
+
+/*
+10. CREA UNA VISTA CON EL NUMERO DE MUNICIPIOS Y EL NUMERO DE LOCALIDADES DE LOS
+    ESTADOS LA REPUBLICA MEXICANA
+*/
+CREATE VIEW V_No_Municipios_Localidades_Por_Estado_Mexico AS (
+SELECT E.EstadoNombre,
+(SELECT COUNT(M.MpoId) FROM dbo.Municipios M WHERE M.EstadoId = E.EstadoId) AS [NUMERO DE MUNICIPIOS],
+(SELECT COUNT(L.LocId) FROM dbo.Localidades L WHERE L.EstadoId = E.EstadoId) AS [NUMERO DE LOCALIDADES]
+FROM dbo.Estados E
+WHERE E.PaisID = 484);
+
+/*
+11. MUESTRA LAS LOCALIDADES CON SU NOMBRE DE ESTADO Y MUNICIPIO, DEL ESTADO DE
+    NAYARIT Y QUE PERTENEZCAN AL MUNICIPIO DE RUIZ, TEPIC, SANTA MARIA DEL OTRO Y
+    ADEMAS QUE SU NOMBRE EMPIECE CON UNA VOCAL.
+*/
+SELECT L.LocNombre,E.EstadoNombre, M.MpoNombre
+FROM dbo.Localidades L
+INNER JOIN dbo.Estados E ON (L.EstadoId = E.EstadoId)
+INNER JOIN dbo.Municipios M ON (L.MpoId = M.MpoId) 
+WHERE E.EstadoId = 18 AND M.MpoId IN (11,14,17) AND L.LocNombre LIKE '[AEIOU]%';
+
+/*
+12. MUESTRA LAS PERSONAS QUE SEAN TUS FAMILIARES QUE VIVAN EN NAYARIT Y SU
+    CELULAR EMPIECE CON 311
+*/
+SELECT * FROM dbo.Directorio WHERE  dbo.Directorio.EstadoId = 18 AND dbo.Directorio.TipoId = 'F' AND dbo.Directorio.DirCelular LIKE '311%';
+
+/*
+13. MUESTRA CUANTAS LOCALIDADES TIENE CADA MUNICIPIO MOSTRANDO EL NOMBRE DEL
+    MUNICIPIO Y EL NO. DE LOCALIDADES.
+*/
+SELECT M.MpoNombre, COUNT(L.LocId) AS [NO. DE LOCALIDADES] FROM dbo.Municipios M
+INNER JOIN dbo.Localidades L ON (M.MpoId = L.MpoId)
+GROUP BY M.MpoNombre
+
+/*
+14. MUESTRA LO SIGUIENTE
+    NOMBRE LOCALIDAD, NOMBRE MUNICIPIO, NOMBRE ESTADO, NOMBRE PAIS DE LOS
+    ESTADOS DE SINALOA Y SONORA.
+*/
+SELECT L.LocNombre, M.MpoNombre, E.EstadoNombre, P.PaisNombre
+FROM dbo.Paises P
+INNER JOIN dbo.Estados E ON (P.PaisId = E.PaisID)
+INNER JOIN dbo.Municipios M ON (E.EstadoId = M.EstadoId)
+INNER JOIN dbo.Localidades L ON (M.MpoId = L.LocId)
+WHERE E.EstadoId IN (25,26)
+ORDER BY E.EstadoNombre
+
+/*
+15. MUESTRA CUANTAS PERSONAS TENEMOS REGISTRADAS EN CADA MUNICIPIPIO DE
+    AQUELLOS MUNICIPIO QUE TENGAN MAS 20 PERSONAS REGISTRADAS.
+*/
+SELECT D.DirNombre AS MUNICIPIO, COUNT(D.MpoId) AS [PERSONAS REGISTRADAS] FROM dbo.Directorio D GROUP BY D.DirNombre HAVING COUNT(D.MpoId)>20
+
+/*
+16. CREA UNA VISTA QUE MUESTRE LA LOCALIDAD, TIPO DE PERSONA Y CUANTOS ESTAN
+    REGISTRADAS EN MI AGENDA DE ELLAS.
+*/
+CREATE VIEW V_Localidad_TipoPersona_PersonasRegistradas AS (
+SELECT L.LocNombre, TP.TipoNombre, COUNT(D.DirId) AS [PERSONAS REGISTRADAS]
+FROM dbo.Directorio D
+INNER JOIN dbo.Localidades L ON (D.LocId = L.LocId)
+INNER JOIN dbo.TiposPersonas TP ON (D.TipoId = TP.TipoId)
+GROUP BY L.LocNombre, TP.TipoNombre);
+
+/*
+17. BORRA LOS REGISTROS DEL DIRECTORIO DE LOS QUE SEAN FAMILIARES O AMIGOS TUYOS
+    Y ADEMAS QUE ESTEN REGISTRADOS EN ALGUN MUNICIPIO DE TEPIC.
+*/
+DELETE FROM dbo.Directorio WHERE TipoId IN ('F','A') AND MpoId = 17;
+
+/*
+18. ACTUALIZA EL TELEFONO, CALLE, NUMERO Y COLONIA DE LAS PERSONAS QUE EL
+    DIRECTORIO SEAN DE SERVICIOS, NEGOCIOS O FAMILIA DE AQUELLOS QUE PERTENEZCAN
+    A ALGUN LOCALIDAD DE SAN MIGUEL EL ALTO, JALISCO.
+*/
+UPDATE dbo.Directorio SET
+DirTelefono = '3112016585',
+DirCalle = 'Cuarzo Roza',
+DirNoExt = 24,
+DirColonia = 3
+WHERE TipoId IN ('S','N','F') AND PaisId = 484 AND EstadoId = 14 AND MpoId = 78 AND LocId = 1;
+
+/*
+19. MUESTRAME LAS PERSONAS QUE ESTEN REGISTRADAS EN EL DIRECTORIO DE SINALOA O
+    SONORA CON SUS DATOS PERSONALES, NOMBRE DE LOCALIDAD Y NOMBRE DE
+    MUNICIPIO EN DONDE VIVEN.
+*/
+SELECT D.DirNombre, D.DirApellidos, L.LocNombre, M.MpoNombre FROM dbo.Directorio D
+INNER JOIN dbo.Estados E ON (D.EstadoId = E.EstadoId)
+INNER JOIN dbo.Municipios M ON (D.MpoId = M.MpoId)
+INNER JOIN dbo.Localidades L ON (D.LocId = L.LocId)
+WHERE E.EstadoNombre IN ('SINALOA','SONORA');
